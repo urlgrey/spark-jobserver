@@ -15,6 +15,7 @@ object Dependencies {
     "joda-time" % "joda-time" % "2.1"
   )
 
+  val sparkVersion = sys.env.getOrElse("SPARK_VERSION", "1.3.1")
   lazy val akkaDeps = Seq(
     // Akka is provided because Spark already includes it, and Spark's version is shaded so it's not safe
     // to use this one
@@ -23,10 +24,10 @@ object Dependencies {
     "io.spray" %% "spray-can" % "1.3.2",
     "io.spray" %% "spray-routing" % "1.3.2",
     "io.spray" %% "spray-client" % "1.3.2",
+    "org.apache.spark" %% "spark-mllib" % sparkVersion excludeAll(excludeNettyIo, excludeQQ),
     yammerDeps
   ) ++ yodaDeps
 
-  val sparkVersion = sys.env.getOrElse("SPARK_VERSION", "1.3.1")
   lazy val sparkDeps = Seq(
     "org.apache.spark" %% "spark-core" % sparkVersion % "provided" excludeAll(excludeNettyIo, excludeQQ),
     // Force netty version.  This avoids some Spark netty dependency problem.
